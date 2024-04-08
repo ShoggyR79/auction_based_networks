@@ -1,0 +1,189 @@
+syntax = "proto3";
+
+enum Veggie {
+    NONE_VEGGIE = 0;
+    TOMATO = 1;
+    CUCUMBER = 2;
+    ONION = 3;
+    LETTUCE = 4;
+    PEPPER = 5;
+    
+}
+
+message Veggies {
+    Veggie veggie = 1;
+    float value = 2; // in pounds
+}
+
+enum Can {
+    NONE_CAN = 0;
+    COKE = 1;
+    BEER = 2;
+    WATERCAN = 3;
+}
+
+enum Bottle {
+    NONE_BOTTLE = 0;
+    SPRITE=1;
+    GINGERALE = 2;
+    WATERBOTTLE = 3;
+}
+
+message Drinks {
+    Can can = 1;
+    Bottle bottle = 2;
+    uint32 can_value = 3; // in packs
+    uint32 bottle_value = 4; // in packs
+}
+
+enum MilkType {
+    NONE_MILK = 0;
+    SKIM = 1;
+    WHOLE = 2;
+}
+
+message MilkItem {
+    MilkType milk_type = 1;
+    float value = 2; // in gallons
+}
+
+message Milks {
+    repeated MilkItem milk_items = 1;
+}
+
+enum BreadType {
+    NONE_BREAD = 0;
+    WHITE = 1;
+    WHEAT = 2;
+    
+}
+
+message BreadItem {
+    BreadType bread_type = 1;
+    float value = 2; // in loaves
+}
+
+message Breads {
+    repeated BreadItem bread_items = 1;
+}
+
+
+enum MeatType {
+    NONE_MEAT = 0;
+    HAM = 1;
+    TURKEY = 2;
+    ROAST_BEEF = 3;
+    
+}
+
+message MeatItem {
+    MeatType meat_type = 1;
+    float value = 2; // in pounds
+}
+
+message Meats {
+    repeated MeatItem meat_items = 1;
+}
+
+
+message OrderRequest {
+    Veggies veggies = 2;
+    Drinks drinks = 3;
+    Milks milks = 4;
+    Breads breads = 5;
+    Meats meats = 6;}
+
+enum RequestType {
+    NONE_REQ = 0;
+    ORDER = 1;
+    HEALTH = 2;
+    QUERY_REQ = 3;
+    BID_REQ = 4;
+}
+
+enum DispenserStatus {
+    NONE_DIS = 0;
+    OPTIMAL = 1;
+    PARTIAL = 2;
+    BLOCKAGE = 3;
+}
+
+enum LightBulbStatus {
+    NONE_LB = 0;
+    GOOD_LB = 1;
+    BAD_LB = 2;
+}
+
+enum SensorStatus {
+    NONE_SS =0;
+    GOOD_SS = 1;
+    BAD_SS = 2;
+}
+
+message HealthRequest {
+    DispenserStatus dispenser = 1;
+    uint32 icemaker = 2; // percentage
+    LightBulbStatus light_bulb = 3;
+    int32 fridge_temp =4;
+    int32 freezer_temp = 5;
+    SensorStatus fridge_sensor = 6;
+    int32 yaw = 7; // degree
+    uint32 stock = 8; // percentage
+}
+
+message QueryRequest {
+
+}
+
+message Resource {
+    int32 id = 1;
+}
+
+message BidRequest {
+    float price = 1;
+    int32 duration = 2;
+    repeated Resource resources = 3;
+}
+
+message Request {
+    RequestType type = 1;
+    oneof request {
+        OrderRequest order_request = 2;
+        HealthRequest health_request = 3;
+        QueryRequest query_request = 4;
+        BidRequest bid_request = 5;
+    }
+}
+
+
+
+
+enum ResponseType {
+    MESSAGE = 0;
+    QUERY_RES = 1;
+    BID_RES = 2;
+}
+
+message QueryResponse {
+    repeated Resource resources = 1;
+    float balance = 2;
+}
+
+message BidResponse {
+    string status = 1;
+}
+
+message Response {
+    ResponseType type = 1;
+    oneof response {
+        string message_response = 2;
+        QueryResponse query_response = 3;
+        BidResponse bid_response = 4;
+    }
+}
+
+
+service FridgeService 
+{
+    rpc method (Request) returns (Response);
+}

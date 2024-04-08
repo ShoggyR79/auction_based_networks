@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+message Resource {
+    uint32 id = 1;
+}
+
+message Request {
+    uint32 duration = 1;
+    uint32 price = 2;
+    repeated Resource resources = 3;
+}
+
+message Response {
+    string message = 1;
+}
+
+
+service BidService 
+{
+    rpc method (Request) returns (Response);
+}

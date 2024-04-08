@@ -1,0 +1,9 @@
+- auction-based allocation system where users can bid (using virtual currency) to gain access to federated computing resources
+- a client first query the server for available resources and their current "bank balance" to make a bidding decision
+- available resources are [1,2,3,4,5], where 1 is the "least powerful" computing node whereas 5 is the "most powerful" computing node
+- the client then decides on which resource(s) to bid for (which is randomized) and for how long as well as how much currency it is willing to bid
+- the client then submit their bid to the server
+- the server accumulates bids from clients for a certain window of time (10 seconds), after which the server locks itself from receiving more bids in order to decide the winner(s) out of the accumulated bids (achieved by multithreading and locks). The bank then adjust the balances as appropriate.
+- if the client wins the bid, then it begins to send their requests to be processed by the server, and the server will process the request using the computing resources that the client has access to (based on its winning bid)
+- every 30 seconds, the bank will collect tax from some users and redistribute the currency to other users to ensure fairness
+- implemented with protobuf + gRPC
